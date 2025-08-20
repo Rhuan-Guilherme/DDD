@@ -1,20 +1,24 @@
-import { Question } from '../../enterprise/entities/question'
-import { QuestionRepository } from '../repository/question-repository'
+import { InMemoryQuestionsRepository } from 'test/repositories/in-memory-questions-repository'
 import { CreateQuestionUseCase } from './create-question'
 
-const fakeQuestionRepository: QuestionRepository = {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  create: async (question: Question) => {},
-}
+let inMemoryQuestionsRepository: InMemoryQuestionsRepository
+let sut: CreateQuestionUseCase
 
-test('Create an answer', async () => {
-  const createQuestion = new CreateQuestionUseCase(fakeQuestionRepository)
-  const { question } = await createQuestion.execute({
-    authorId: '1',
-    title: 'New question',
-    content: 'Content a new question',
+describe('Create Question', () => {
+  beforeEach(() => {
+    inMemoryQuestionsRepository = new InMemoryQuestionsRepository()
+    sut = new CreateQuestionUseCase(inMemoryQuestionsRepository)
   })
 
-  expect(question.title).toEqual('New question')
-  expect(question.slug.value).toEqual('new-question')
+  it('Should be able to create an question', async () => {
+    const { question } = await sut.execute({
+      authorId: '1',
+      title: 'New question',
+      content: 'Content a new question',
+    })
+
+    expect(question.title).toEqual('New question')
+    expect(question.slug.value).toEqual('new-question')
+    expect(inMemoryQuestionsRepository.itens[0].id).toEqual(question.id)
+  })
 })
