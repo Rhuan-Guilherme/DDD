@@ -1,6 +1,7 @@
 import { AnswerQuestionUseCase } from './answer-quetion'
+
+import { Answer } from '../../enterprise/entities/answer'
 import { AnswerRepository } from '../repository/answer-repository'
-import { Answer } from '../entities/answer'
 
 const fakeAnswerRepository: AnswerRepository = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
